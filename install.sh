@@ -27,5 +27,5 @@ go install github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
 go install github.com/channyein1337/jsleak@latest
 go install github.com/glebarez/cero@latest
 
-#sudo cp -r ~/go/bin/* /usr/local/bin/
+sudo cp -r ~/go/bin/* /usr/local/bin/
 
