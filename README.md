@@ -13,7 +13,9 @@ It chains together powerful open-source tools to enumerate subdomains, probe for
 ```bash
 git clone https://github.com/yourusername/krwl.git
 cd krwl
-chmod +x krwl.sh
+sudo chmod +x install.sh
+sudo chmod +x krwl.sh
+./install.sh
 add github gitlab chaos & shodan api in config.txt
 ./krwl.sh -d example.com
 ```
