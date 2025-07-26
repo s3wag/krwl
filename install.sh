@@ -24,7 +24,7 @@ go install github.com/jaeles-project/gospider@latest
 go install github.com/tomnomnom/unfurl@latest
 go install github.com/s0md3v/smap/cmd/smap@latest
 go install github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
-go install github.com/0xKayala/jsleak@latest
+go install github.com/channyein1337/jsleak@latest
 go install github.com/glebarez/cero@latest
 
 #sudo cp -r ~/go/bin/* /usr/local/bin/
