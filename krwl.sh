@@ -260,23 +260,23 @@ echo -e "${MAGENTA}[*] Creating secrets Directory ${NC}"
 mkdir -p secrets
 
 echo -e "${YELLOW}[*] Starting Scraping GitLeaks From JavaScripts Files ${NC}"
-cat juicy/js.txt | jsleak  -t ~/tools/reconner/krwl/secrets-patterns-db/datasets/git-leaks.yml -s | anew secrets/js-git-leaks.txt
+cat juicy/js.txt | jsleak  -t "./secrets-patterns-db/datasets/git-leaks.yml" -s | anew secrets/js-git-leaks.txt
 echo -e "${GREEN}[+] GitLeaks Found From JavaScript: $(wc -l < secrets/js-git-leaks.txt)${NC}"
 
 echo -e "${YELLOW}[*] Starting Scraping MetaData From JavaScripts Files ${NC}"
-cat juicy/js.txt | jsleak  -t ~/tools/reconner/krwl/secrets-patterns-db/datasets/high-confidence.yml -s | anew secrets/js-metadata.txt
+cat juicy/js.txt | jsleak  -t "./secrets-patterns-db/datasets/high-confidence.yml" -s | anew secrets/js-metadata.txt
 echo -e "${GREEN}[+] MetaData Found From JavaScript: $(wc -l < secrets/js-metadata.txt)${NC}"
 
 echo -e "${YELLOW}[*] Starting Scraping Leaks From JavaScripts Files ${NC}"
-cat juicy/js.txt | jsleak  -t ~/tools/reconner/krwl/secrets-patterns-db/datasets/leakin-regexes.yml -s | anew secrets/js-leaked.txt
+cat juicy/js.txt | jsleak  -t "./secrets-patterns-db/datasets/leakin-regexes.yml" -s | anew secrets/js-leaked.txt
 echo -e "${GREEN}[+] Leaks Found From JavaScript: $(wc -l < secrets/js-leaked.txt)${NC}"
 
 echo -e "${YELLOW}[*] Starting Scraping Regexes From JavaScripts Files ${NC}"
-cat juicy/js.txt | jsleak  -t ~/tools/reconner/krwl/secrets-patterns-db/datasets/nuclei-regexes.yml -s | anew secrets/js-regexes.txt
+cat juicy/js.txt | jsleak  -t "./secrets-patterns-db/datasets/nuclei-regexes.yml" -s | anew secrets/js-regexes.txt
 echo -e "${GREEN}[+] Regexes Found From JavaScript: $(wc -l < secrets/js-leaked.txt)${NC}"
 
 echo -e "${YELLOW}[*] Starting Scraping Trufflehog-Secrets From JavaScripts Files ${NC}"
-cat juicy/js.txt | jsleak  -t ~/tools/reconner/krwl/secrets-patterns-db/datasets/trufflehog-v3.yml -s | anew secrets/js-trufflehog.txt
+cat juicy/js.txt | jsleak  -t "./secrets-patterns-db/datasets/trufflehog-v3.yml" -s | anew secrets/js-trufflehog.txt
 echo -e "${GREEN}[+] Trufflehog-Secrets Found From JavaScript: $(wc -l < secrets/js-leaked.txt)${NC}"
 
 
