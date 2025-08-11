@@ -9,7 +9,7 @@ It chains together powerful open-source tools to enumerate subdomains, probe for
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/yourusername/krwl.git
+git clone https://github.com/s3wag/krwl.git
 cd krwl
 sudo chmod +x install.sh
 sudo chmod +x krwl.sh
