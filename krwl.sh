@@ -18,8 +18,7 @@ CYAN='\e[36m'
 MAGENTA='\e[35m'
 NC='\e[0m' # No Color
 
-# ReconX00 - Recon Script for Bug Bounty (by @3$H4N$H)
-# Usage: ./reconx00.sh -d domain.com
+# Usage: ./krwl.sh -d domain.com
 
 while getopts ":d:" input; do
   case "$input" in
