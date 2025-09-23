@@ -43,8 +43,8 @@ mkdir -p tmp
 echo -e "${CYAN}[*] Starting Passive Enumeration...${NC}"
 
 echo -e "${YELLOW}[*] Starting Passive Enumeration Using URLSCAN ${NC}"
-curl -s "https://urlscan.io/api/v1/search/?q=domain:$domain" | egrep "domain|$domain" | sort -u > tmp/urlscanio_raw
-grep -oE "[a-zA-Z0-9.-]+\\.$domain" tmp/urlscanio_raw | anew tmp/urlscanio.txt
+curl -s "https://urlscan.io/api/v1/search/?q=domain:$domain" | egrep "domain|$domain" | sort -u > tmp/urlscanio_raw.txt
+grep -oE "[a-zA-Z0-9.-]+\\.$domain" tmp/urlscanio_raw.txt | anew tmp/urlscanio.txt
 echo -e "${GREEN}[+] Subdomains found by urlscanio: $(wc -l < tmp/urlscanio.txt)${NC}"
 
 echo -e "${YELLOW}[*] Starting Passive Enumeration Using CERTSPOTTER ${NC}"
@@ -163,20 +163,26 @@ cat juicy/passive_raw.txt | grep '\.pdf$' | httpx -mc 200 -no-color | anew juicy
 echo -e "${BLUE}[✓] From Scrapping PDF Files Found: $(wc -l < juicy/pdf.txt)${NC}"
 
 echo -e "${YELLOW}[*] Starting Scrapping for Node_Modules Files Data ${NC}"
-grep -E '/node_modules/.+\.js' passive_raw.txt | httpx -mc 200 -no-color | anew juicy/node_modules.txt
+grep -E '/node_modules/.+\.js' juicy/passive_raw.txt | httpx -mc 200 -no-color | anew juicy/node_modules.txt
 echo -e "${BLUE}[✓] From Scrapping Node_Modules Files Found: $(wc -l < juicy/node_modules.txt)${NC}"
 
-echo -e "${YELLOW}[*] Starting Scrapping for PDF Files Data ${NC}"
+echo -e "${YELLOW}[*] Starting Scrapping for Robots Files Data ${NC}"
 cat juicy/passive_raw.txt | grep 'robots.txt' | httpx -mc 200 -no-color | anew juicy/robots.txt
-echo -e "${BLUE}[✓] From Scrapping PDF Files Found: $(wc -l < juicy/pdf.txt)${NC}"
+cat juicy/subdomains.txt | httpx --path=robots.txt -mc 200 | anew juicy/robots.txt
+echo -e "${BLUE}[✓] From Scrapping robots Files Found: $(wc -l < juicy/robots.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Scrapping for SiteMap Files Data ${NC}"
+cat juicy/subdomains.txt | httpx --path=sitemap.xml -mc 200 | anew juicy/sitemap.txt
+cat juicy/subdomains.txt | httpx --path=sitemap_index.xml -mc 200 | anew juicy/sitemap.txt
+echo -e "${BLUE}[✓] From Scrapping Sitemaps Files Found: $(wc -l < juicy/sitemap.txt)${NC}"
 
 echo -e "${YELLOW}[*] Starting Scrapping for Useful Files Data ${NC}"
 cat juicy/passive_raw.txt | grep -iaE "([^.]+)\.zip$|([^.]+)\.zip\.[0-9]+$|([^.]+)\.zip[0-9]+$|([^.]+)\.zip[a-z][A-Z][0-9]+$|([^.]+)\.zip\.[a-z][A-Z][0-9]+$|([^.]+)\.rar$|([^.]+)\.tar$|([^.]+)\.tar\.gz$|([^.]+)\.tgz$|([^.]+)\.sql$|([^.]+)\.db$|([^.]+)\.sqlite$|([^.]+)\.pgsql\.txt$|([^.]+)\.mysql\.txt$|([^.]+)\.gz$|([^.]+)\.config$|([^.]+)\.log$|([^.]+)\.bak$|([^.]+)\.backup$|([^.]+)\.bkp$|([^.]+)\.crt$|([^.]+)\.dat$|([^.]+)\.eml$|([^.]+)\.java$|([^.]+)\.lst$|([^.]+)\.key$|([^.]+)\.passwd$|([^.]+)\.pl$|([^.]+)\.pwd$|([^.]+)\.mysql-connect$|([^.]+)\.jar$|([^.]+)\.cfg$|([^.]+)\.dir$|([^.]+)\.orig$|([^.]+)\.bz2$|([^.]+)\.old$|([^.]+)\.vbs$|([^.]+)\.inf$|([^.]+)\.sh$|([^.]+)\.py$|([^.]+)\.vbproj$|([^.]+)\.mysql-pconnect$|([^.]+)\.war$|([^.]+)\.go$|([^.]+)\.psql$|([^.]+)\.sql\.gz$|([^.]+)\.vb$|([^.]+)\.webinfo$|([^.]+)\.jnlp$|([^.]+)\.cgi$|([^.]+)\.tmp$|([^.]+)\.ini$|([^.]+)\.webproj$|([^.]+)\.xsql$|([^.]+)\.raw$|([^.]+)\.inc$|([^.]+)\.lck$|([^.]+)\.nz$|([^.]+)\.rc$|([^.]+)\.html\.gz$|([^.]+)\.gz$|([^.]+)\.env$|([^.]+)\.git$|([^.]+)\.yml$|([^.]+)\.asp$|([^.]+)\.aspx$|([^.]+)\.jsp$|([^.]+)\.jspf$|([^.]+)\.jspa$|([^.]+)\.php$|([^.]+)\.php3$|([^.]+)\.php5$|([^.]+)\.phpbb$|([^.]+)\.phpt$|([^.]+)\.phps$|([^.]+)\.rb$|([^.]+)\.do$|([^.]+)\.dll$|([^.]+)\.mdb$|([^.]+)\.mdf$|([^.]+)\.xml$|([^.]+)\.ascx$|([^.]+)\.c$|([^.]+)\.cfm$|([^.]+)\.cpp$|([^.]+)\.swf$|([^.]+)\.tpl$|([^.]+)\.vb$|([^.]+)\.wsdl$|([^.]+)\.action$ |([^.]+)\.conf$|([^.]+)\.htaccess$ |([^.]+)\.properties$|([^.]+)\.ascx$|([^.]+)\.resx$|([^.]+)\.csproj$|([^.]+)\.pdb$|([^.]+)\.sln$|([^.]+)\.vbproj$ " | httpx -mc 200 -no-color | anew juicy/useful.txt
 echo -e "${BLUE}[✓] From Scrapping Useful Files Found: $(wc -l < juicy/useful.txt)${NC}"
 
-echo -e "${YELLOW}[*] Starting Scrapping for URLFuzzing Files Data ${NC}"
-cat juicy/passive_raw.txt | grep -Ev '\.js$|\.json$|\.pdf$|\.css$' | grep -E '\?.+=.+' | httpx -mc 200 -no-color | anew juicy/forURLfuzz.txt
-echo -e "${BLUE}[✓] From Scrapping URLFuzzing Files Found: $(wc -l < juicy/forURLfuzz.txt)${NC}"
+echo -e "${YELLOW}[*] Starting Scrapping for UrlForFUZZ Files Data ${NC}"
+cat juicy/passive_raw.txt | grep -Ev '\.js$|\.json$|\.pdf$|\.css$' | grep -E '\?.+=.+' | httpx -mc 200 -no-color | anew juicy/urlforfuzz.txt
+echo -e "${BLUE}[✓] From Scrapping URLFuzzing Files Found: $(wc -l < juicy/urlforfuzz.txt)${NC}"
 
 ### Wordlist Creation From Passive Data
 
@@ -252,7 +258,7 @@ smap -iL juicy/ip.txt | tee juicy/smap.txt
 #echo -e "${YELLOW}[*] Starting Naabu + Nmap Port Mapping Output in naabu_with_nmap.txt ${NC}"
 #naabu -l juicy/ip.txt -p 0-65535 -o juicy/naabu_with_nmap.txt
 
-### JS Leaks Finder
+### JavaSript Enumeration 
 echo -e "${CYAN}[*] Starting Scrapping Secrets From JavaScript Files... ${NC}"
 
 echo -e "${MAGENTA}[*] Creating secrets Directory ${NC}"
@@ -278,5 +284,72 @@ echo -e "${YELLOW}[*] Starting Scraping Trufflehog-Secrets From JavaScripts File
 cat juicy/js.txt | jsleak  -t "../secrets-patterns-db/datasets/trufflehog-v3.yml" -s | anew secrets/js-trufflehog.txt
 echo -e "${GREEN}[+] Trufflehog-Secrets Found From JavaScript: $(wc -l < secrets/js-leaked.txt)${NC}"
 
+### TechStack Fingerprinting Scan
+echo -e "${YELLOW}[*] Starting Scraping Tech-Stack From Subdomains Files ${NC}"
+whatweb -i juicy/probed-subdomains.txt | anew juicy/whatweb_short.txt
+echo -e "${GREEN}[+] Tech Stack Short Found From Subdomains: $(wc -l < juicy/whatweb_short.txt)${NC}"
+whatweb -i juicy/probed-subdomains.txt -v | anew juicy/whatweb_long.txt
+echo -e "${GREEN}[+] Tech Stack Long Found From Subdomains: $(wc -l < juicy/whatweb_long.txt)${NC}"
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon Probed Subdomains for Technologies ${NC}"
+cat juicy/probed-subdomains.txt | nuclei -t ~/.local/nuclei-templates/http/technologies/ | anew secrets/technologies.txt
+echo -e "${GREEN}[+] Nuclei Found Technologies: $(wc -l < secrets/technologies.txt)${NC}"
+
+### Nuclei Enumeration
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon Probed Subdomains for Exposed Panels ${NC}"
+cat juicy/probed-subdomains.txt | nuclei -t ~/.local/nuclei-templates/http/exposed-panels/ | anew secrets/exposed-panels.txt
+echo -e "${GREEN}[+] Nuclei Found Exposed-panels: $(wc -l < secrets/exposed-panels.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon Probed Subdomains for Default Logins ${NC}"
+cat juicy/probed-subdomains.txt | nuclei -t ~/.local/nuclei-templates/http/default-logins/ | anew secrets/default-logins.txt
+echo -e "${GREEN}[+] Nuclei Found default-Logins: $(wc -l < secrets/default-logins.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon Probed Subdomains for Exposures ${NC}"
+cat juicy/probed-subdomains.txt | nuclei -t ~/.local/nuclei-templates/http/exposures/ | anew secrets/exposures.txt
+echo -e "${GREEN}[+] Nuclei Found Exposures: $(wc -l < secrets/exposures.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon Probed Subdomains for Misconfigurations ${NC}"
+cat juicy/probed-subdomains.txt | nuclei -t ~/.local/nuclei-templates/http/misconfiguration/ | anew secrets/misconfiguration.txt
+echo -e "${GREEN}[+] Nuclei Found Misconfigurations: $(wc -l < secrets/misconfiguration.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon Probed Subdomains for Miscellaneous ${NC}"
+cat juicy/probed-subdomains.txt | nuclei -t ~/.local/nuclei-templates/http/miscellaneous/ | anew secrets/miscellaneous.txt
+echo -e "${GREEN}[+] Nuclei Found Misconfigurations: $(wc -l < secrets/miscellaneous.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon Probed Subdomains for CVEs ${NC}"
+cat juicy/probed-subdomains.txt | nuclei -t ~/.local/nuclei-templates/http/cves/ | anew secrets/cves.txt
+echo -e "${GREEN}[+] Nuclei Found CVEs: $(wc -l < secrets/cves.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon Probed Subdomains for CVNd ${NC}"
+cat juicy/probed-subdomains.txt | nuclei -t ~/.local/nuclei-templates/http/cvnd/ | anew secrets/cvnd.txt
+echo -e "${GREEN}[+] Nuclei Found CVNd: $(wc -l < secrets/cvnd.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon Probed Subdomains for Takeovers ${NC}"
+cat juicy/probed-subdomains.txt | nuclei -t ~/.local/nuclei-templates/http/takeovers/ | anew secrets/takeovers.txt
+echo -e "${GREEN}[+] Nuclei Found Takeovers: $(wc -l < secrets/takeovers.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon Probed Subdomains for Vulnerabilities ${NC}"
+cat juicy/probed-subdomains.txt | nuclei -t ~/.local/nuclei-templates/http/vulnerabilities/ | anew secrets/vulnerabilities.txt
+echo -e "${GREEN}[+] Nuclei Found Vulnerabilities: $(wc -l < secrets/vulnerabilities.txt)${NC}"
+
+### Nuclei Fuzzing
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon urlforfuzz Subdomains for Open-Redirect ${NC}"
+cat juicy/urlforfuzz.txt | nuclei -dast -t /home/kali/.local/nuclei-templates/dast/vulnerabilities/redirect/open-redirect.yaml -o secrets/open-redirect.txt
+echo -e "${GREEN}[+] Nuclei Found Open-Redirect: $(wc -l < secrets/open-redirect.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon urlforfuzz Subdomains for Open-Redirect-Bypass ${NC}"
+cat juicy/urlforfuzz.txt | nuclei -dast -t /home/kali/.local/nuclei-templates/dast/vulnerabilities/redirect/open-redirect-bypass.yaml -o secrets/open-redirect-bypass.txt
+echo -e "${GREEN}[+] Nuclei Found Open-Redirect-Bypass: $(wc -l < secrets/open-redirect-bypass.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Nuclei Scan Upon urlforfuzz Subdomains for Open-Redirect-Bypass ${NC}"
+cat juicy/urlforfuzz.txt | nuclei -dast -t /home/kali/.local/nuclei-templates/dast/vulnerabilities/redirect/open-redirect-bypass.yaml -o secrets/open-redirect-bypass.txt
+echo -e "${GREEN}[+] Nuclei Found Open-Redirect-Bypass: $(wc -l < secrets/open-redirect-bypass.txt)${NC}"
+
+
+### Content Dicovery
+
+
+### Subdomain Takeover
 
 echo "[✔] Recon Complete! Results of $domain"
