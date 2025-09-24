@@ -4,7 +4,7 @@ set -e
 
 echo "[+] Updating packages..."
 sudo apt update && sudo apt-get update
-sudo apt install -y golang amass jq whatweb nuclei
+sudo apt install -y golang amass jq whatweb nuclei libpcap-dev
 pipx install uro
 
 echo "[+] Installing Go tools..."
