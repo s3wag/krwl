@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Load configuration and API keys
 if [ -f "./config.txt" ]; then
   source ./config.txt
