@@ -4,12 +4,13 @@ set -e
 
 echo "[+] Updating packages..."
 sudo apt update && sudo apt-get update
-sudo apt install -y golang amass jq whatweb nuclei libpcap-dev
+sudo apt install -y golang jq whatweb nuclei libpcap-dev
 pipx install uro
 
 echo "[+] Installing Go tools..."
 
 go install github.com/tomnomnom/assetfinder@latest
+CGO_ENABLED=0 go install -v github.com/owasp-amass/amass/v5/cmd/amass@main
 go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 go install github.com/incogbyte/shosubgo@latest
 go install github.com/gwen001/github-subdomains@latest
