@@ -10,7 +10,7 @@ pipx install uro
 echo "[+] Installing Go tools..."
 
 go install github.com/tomnomnom/assetfinder@latest
-CGO_ENABLED=0 go install -v github.com/owasp-amass/amass/v5/cmd/amass@main
+go install -v github.com/owasp-amass/amass/v4/...@master
 go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 go install github.com/incogbyte/shosubgo@latest
 go install github.com/gwen001/github-subdomains@latest
